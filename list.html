@@ -3,7 +3,7 @@
         <title>List</title>
     </head>
     <body>
-        <h1>Today Window</h1>
+        <h1>List</h1>
         <div id="list"></div>
     </body>
 
@@ -11,9 +11,9 @@
         const electron = require("electron");
         const {ipcRenderer} = electron;
 
-        ipcRenderer.send("appointment:request:today");
+        ipcRenderer.send("appointment:request:list");
 
-        ipcRenderer.on("appointment:request:today", (event, appointments) => {
+        ipcRenderer.on("appointment:request:list", (event, appointments) => {
             const listDiv = document.getElementById("List");
             appointments.forEach(appointment => {
                 const appointmentDiv = document.createElement("div");
@@ -36,12 +36,6 @@
                 const doneParagraph = document.createElement("p");
                 doneParagraph.innerHTML = `Name: ${appointment.done ? "Yes" : "No"}`;
 
-                const doneButton = document.createElement("button");
-                doneButton.innerHTML = "Done";
-                doneButton.disabled = appointment.done ? true : false;
-                doneButton.onclick = () => done(appointment.id);
-
-
                 const hr = document.createElement("hr");
                 
                 appointmentDiv.appendChild(nameParagraph);
@@ -50,17 +44,11 @@
                 appointmentDiv.appendChild(hourParagraph);
                 appointmentDiv.appendChild(symptomsParagraph);
                 appointmentDiv.appendChild(doneParagraph);
-                appointmentDiv.appendChild(doneButton);
                 appointmentDiv.appendChild(hr);
-
 
                 listDiv.append(appointmentDiv);
             });
 
         });
-
-        const done = id => {
-            ipcRenderer.send("appointment:done", id);
-        };
     </script>
 </html>
